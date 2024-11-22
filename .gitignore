@@ -18,5 +18,3 @@ lerna-debug.log*
 build
 dist
 .yarn
-
-storybook-static
