@@ -34,7 +34,7 @@ export const ArticleParamsForm = ({
 	const defaultStateForm = useRef<ArticleStateType>(defaultArticleState);
 	const asideRef = useRef<HTMLDivElement | null>(null);
 
-	const [state, setState] = useState<StateArticleParamsForm>('close');
+	const [menuState, setMenuState] = useState<StateArticleParamsForm>('close');
 
 	const [fontFamily, setfontFamily] = useState<OptionType>(
 		defaultStateForm.current.fontFamilyOption
@@ -53,7 +53,7 @@ export const ArticleParamsForm = ({
 	);
 
 	const toggleState = () => {
-		setState(state === 'close' ? 'open' : 'close');
+		setMenuState(menuState === 'close' ? 'open' : 'close');
 	};
 
 	const changefontFamily = (option: OptionType) => {
@@ -93,23 +93,26 @@ export const ArticleParamsForm = ({
 		setContentWidth(defaultStateForm.current.contentWidth);
 	};
 
+	// создаем переменную
+	const isOpen = menuState === 'open';
+
 	useEffect(() => {
-		if (state !== 'open') return;
+		if (!isOpen) return; // используем тут
 		const closeOverlay = (e: MouseEvent) => {
-			e.target === e.currentTarget && setState('close');
+			e.target === e.currentTarget && setMenuState('close');
 		};
 		asideRef.current?.addEventListener('click', closeOverlay);
 		return () => {
 			asideRef.current?.removeEventListener('click', closeOverlay);
 		};
-	});
+	}, [isOpen]); // следим за переменной, чтобы зря не запускать эффект
 
 	return (
 		<div ref={asideRef} className={clsx(styles.overlay)}>
-			<ArrowButton onClick={toggleState} state={state} />
+			<ArrowButton onClick={toggleState} state={menuState} />
 			<aside
 				className={clsx(styles.container, {
-					[styles.container_open]: state === 'open',
+					[styles.container_open]: menuState === 'open',
 				})}>
 				<form className={styles.form} onSubmit={handleOnSubmitForm}>
 					<Text as='h2' size={31} weight={800} uppercase>
@@ -151,9 +154,9 @@ export const ArticleParamsForm = ({
 						options={contentWidthArr}
 						selected={contentWidth}
 						onChange={changeContentWidth}
-						title='ширина контентат'
+						title='ширина контента'
 					/>
-					<Spacing size={207} />
+					<Spacing size={50} />
 					<div className={styles.bottomContainer}>
 						<Button
 							title='Сбросить'

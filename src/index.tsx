@@ -24,7 +24,7 @@ const App = () => {
 	};
 
 	return (
-		<div
+		<main
 			className={clsx(styles.main)}
 			style={
 				{
@@ -37,7 +37,7 @@ const App = () => {
 			}>
 			<ArticleParamsForm onChangeStateArticle={setConfig} />
 			<Article />
-		</div>
+		</main>
 	);
 };
 
